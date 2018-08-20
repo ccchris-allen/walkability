@@ -11,10 +11,17 @@ from shapely.ops import *
 
 INF = float('inf')
 
-"""
-UTILITY FUNCTIONS
-"""
+
+########################
+# UTILITY FUNCTIONS
+########################
+
 def _create_weight_func(G, weight):
+    """
+    Utility function to create weight function based on specified `weight`
+    parameter.
+    """
+
      def weight_func(u, v):
          edge = G[u][v]
 
@@ -26,8 +33,10 @@ def _create_weight_func(G, weight):
      return weight_func
 
 
+
 def dijkstra(G, source, target, weight, blacklist=set(), max_dist=INF):
-    """Bastardized version of nx.shortest_path (single source and target).
+    """
+    Modified version of nx.shortest_path (single source and target).
     Added ability to avoid blacklisted nodes.
     """
 
@@ -55,7 +64,7 @@ def dijkstra(G, source, target, weight, blacklist=set(), max_dist=INF):
         # this is a priority queue, so will always pop minimum distance
         d, _, v = pop(fringe)
         
-        # ignore if node has been visited already or is blacklisted
+        # ignore if node has been visited already OR is blacklisted
         if v in dist or v in blacklist:
             continue
 
@@ -81,7 +90,11 @@ def dijkstra(G, source, target, weight, blacklist=set(), max_dist=INF):
         
            
 def redundant_paths(G, source, target, weight, coeff, max_dist):
-    """Code inspired by implementation in Urban Network Analysis 
+    """
+    Find all redundant paths between `source` and `target` that are within
+    distance specified by `max_dist`.
+
+    This code is inspired by implementation in Urban Network Analysis 
     toolkit (cityform.mit.edu/projects/urban-network-analysis.html)
     """
 
@@ -105,8 +118,11 @@ def redundant_paths(G, source, target, weight, coeff, max_dist):
 
     return paths
 
+
 def _get_paths(G, nodes, edges, target, weight, available_dist, cache={}):
-    """Recursively get redundant paths."""
+    """
+    Utility function to recursively find redundant paths.
+    """
 
     G_succ = G.succ if G.is_directed() else G.adj
 
@@ -156,6 +172,9 @@ def _get_paths(G, nodes, edges, target, weight, available_dist, cache={}):
 
 def find_optimal_score(scores, path_label='label', criteria=['length'],
                         weights=None, minimize=True):
+    """
+    Find the path with the optimal score values.
+    """
 
     if type(minimize) in (list, np.array):
         minimize = np.array(minimize)

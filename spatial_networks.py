@@ -15,13 +15,24 @@ INF = float('INF')
 """
 UTILITY FUNCTIONS
 """
+
 def _set_if_missing(d, **kwargs):
+    """ 
+    Set dictionary values from `kwargs` if missing.
+
+    The default `update` dictionary method updates the existing object, rather
+    than returning a new object.  This utility function returns a new object
+    when updated.
+    """
+
     kwargs.update(d)
 
     return kwargs
 
+
 def _ensure_geometry(G, u, v):
-    """This function checks whether there is a "geometry" field, and if it 
+    """
+    This function checks whether there is a "geometry" field, and if it 
     doesn't exist it will create "geometry" that is simply a straight line
     between the two nodes.
     """
@@ -189,7 +200,9 @@ class SpatialNetwork(object):
 
     @classmethod
     def from_osm_bbox(cls, bbox):
-        """Grab OpenStreetMap road data within bounding box.
+        """
+        Grab OpenStreetMap road data within bounding box.
+       
         NOTE: Put this in a separate "data" module?
         """
         G = ox.graph_from_bbox(*bbox, network_type='walk')
@@ -199,7 +212,8 @@ class SpatialNetwork(object):
 
 # inherit from SpatialNetwork?
 class Catchment(object):
-    """A catchment is essentially an ego network (a network centered around
+    """
+    A catchment is essentially an ego network (a network centered around
     a specific node) limited by a specified network radius.
     """
 

@@ -16,22 +16,48 @@ INF = float('inf')
 # UTILITY FUNCTIONS
 ########################
 
+
 def _create_weight_func(G, weight):
     """
     Utility function to create weight function based on specified `weight`
     parameter.
     """
 
-     def weight_func(u, v):
-         edge = G[u][v]
+    def weight_func(u, v):
+        edge = G[u][v]
 
-         if G.is_multigraph():
-             return min(att.get(weight, 1) for att in edge.values())
+        if G.is_multigraph():
+            return min(att.get(weight, 1) for att in edge.values())
 
-         return edge.get(weight, 1)
+        return edge.get(weight, 1)
 
-     return weight_func
+    return weight_func
 
+
+def sample_road(geometry, to_crs, from_crs=4326, delta=30.0):        
+    """                                                                         
+    Sample road geometry (must be a LineString) at intervals specified          
+    by `delta` (units: meters).                                            
+                                                                                
+    Returns:                                                                    
+        List of sampling points, where each item is a tuple that specifies      
+        the WGS84 longitude, latitude, and bearing:                             
+                                                                                
+        [((-117.34, 32.153), 90.0), ((-117.363, 32.13), 98.0), ... ]            
+    """                                                                         
+
+    segment = reproject(geometry, from_crs, to_crs)                             
+    samples = []                                                                
+
+    while segment.length > delta:                                               
+        x, y = segment.coords[0]                                                
+        coords = reproject(Point((x, y)), to_crs, from_crs).coords[0]           
+
+        samples.append(coords)                                                  
+
+        segment = cut(segment, delta)[-1]                                       
+
+    return samples
 
 
 def dijkstra(G, source, target, weight, blacklist=set(), max_dist=INF):

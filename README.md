@@ -7,5 +7,11 @@ from OpenStreetMap and analysis methods such as shortest path calculation, redun
 
 ## Notebooks
 
+Notebooks are provided to demonstrate use cases.
 
+### Basic Functionality
+
+This notebook demonstrates basic functions such as downloading road network data, working with catchment areas, and calculating paths between endpoints:
+
+[LINK](https://github.com/ccchris-allen/walkability/blob/master/notebooks/wins-calculate.ipynb)
 
